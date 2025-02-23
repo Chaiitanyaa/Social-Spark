@@ -5,14 +5,14 @@ import Influencer from "../models/influencerModel.js";
 const extractKeywords = async (description) => {
   const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-  const genAI = new GoogleGenerativeAI("YOUR_API_KEY");
+  const genAI = new GoogleGenerativeAI(process.env.GEMINIAPIKEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-  const prompt = "I will be pasting a description of a product here, you need extract 3 main keywords from it which would be used to search youtube influencers in that niche. Description: "; 
+  const prompt = `I will be pasting a description of a product here, you need extract 3 main keywords from it which would be used to search youtube influencers in that niche. Please make sure to only output those 3 keywords and nothing else. Description: ${description}`; 
 
   const result = await model.generateContent(prompt);
   console.log(result.response.text());
-  console.log(`Extracting keywords from: "${description}"`);
+//   console.log(`Extracting keywords from: "${description}"`);
   return ["beauty", "makeup", "skincare"]; // Dummy extracted keywords
 };
 
@@ -53,6 +53,7 @@ const fetchLookalikeInfluencers = async (influencers) => {
 
 // Controller function to find and store influencers
 export const findInfluencers = async (req, res) => {
+    console.log("Received request for influencers");
   const { description } = req.body;
   if (!description)
     return res.status(400).json({ message: "Product description required" });
