@@ -54,7 +54,7 @@ const fetchLookalikeInfluencers = async (influencers) => {
 // Controller function to find and store influencers
 export const findInfluencers = async (req, res) => {
     console.log("Received request for influencers");
-  const { description } = req.body;
+  const  description  = req.body;
   if (!description)
     return res.status(400).json({ message: "Product description required" });
 
