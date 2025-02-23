@@ -14,7 +14,7 @@ export default function Login() {
 
     try {
       const data = await loginUser(email, password);
-      localStorage.setItem('token', data.token); // Store token
+      localStorage.setItem('token', data.token); // Save JWT token
       navigate('/dashboard'); // Redirect to Dashboard after login
     } catch (err) {
       setError(err.message || 'Login failed');

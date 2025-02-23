@@ -18,7 +18,7 @@ export const loginUser = async (email, password) => {
 // Register API (Updated to include role)
 export const registerUser = async (name, email, password, role) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/register`, {
+    const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
       name,
       email,
       password,
