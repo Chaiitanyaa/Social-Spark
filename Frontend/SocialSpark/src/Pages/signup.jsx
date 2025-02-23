@@ -7,37 +7,38 @@ export default function Signup() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('company'); // Default role
-  const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown state
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
-
-    console.log('Submitting Registration:', { name, email, password, role });
 
     try {
-      const response = await registerUser(name, email, password, role);
-      console.log('Registration Success:', response);
-      navigate('/login'); // Redirect on success
+      await registerUser(name, email, password, role);
+      navigate('/login'); // Redirect to login page after successful signup
     } catch (err) {
-      console.error('Signup Error:', err);
-      setError(err.message || 'Registration failed. Please try again.');
-    } finally {
-      setLoading(false);
+      setError(err.message || 'Signup failed. Please try again.');
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-700 to-blue-900 text-white">
-      <div className="bg-blue-800 p-10 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-6">Create Your Account</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white relative">
+      {/* Back to Home Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="absolute top-6 left-6 bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-all shadow-lg"
+      >
+        ← Back to Home
+      </button>
+
+      {/* Signup Form with Glassmorphism */}
+      <div className="bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-md">
+        <h2 className="text-4xl font-bold text-center mb-8">Create Your Account</h2>
 
         <form onSubmit={handleSignup} className="space-y-6">
-          {/* Full Name Field */}
+          {/* Name Field */}
           <div>
             <label className="block text-sm mb-2">Full Name</label>
             <input
@@ -45,7 +46,7 @@ export default function Signup() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your full name"
-              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
@@ -58,7 +59,7 @@ export default function Signup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
@@ -71,7 +72,7 @@ export default function Signup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Create a password"
-              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
@@ -82,19 +83,18 @@ export default function Signup() {
             <button
               type="button"
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400 text-left"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white text-left focus:ring-2 focus:ring-blue-400"
             >
               {role.charAt(0).toUpperCase() + role.slice(1)} ▼
             </button>
-
             {dropdownOpen && (
-              <ul className="absolute w-full bg-blue-700 rounded-lg shadow-lg mt-2 z-10">
+              <ul className="absolute w-full bg-white/20 backdrop-blur-lg rounded-lg shadow-lg mt-2 z-10">
                 <li
                   onClick={() => {
                     setRole('company');
                     setDropdownOpen(false);
                   }}
-                  className="px-4 py-2 hover:bg-blue-600 cursor-pointer rounded-t-lg"
+                  className="px-4 py-2 hover:bg-white/30 cursor-pointer rounded-t-lg"
                 >
                   Company
                 </li>
@@ -103,7 +103,7 @@ export default function Signup() {
                     setRole('influencer');
                     setDropdownOpen(false);
                   }}
-                  className="px-4 py-2 hover:bg-blue-600 cursor-pointer rounded-b-lg"
+                  className="px-4 py-2 hover:bg-white/30 cursor-pointer rounded-b-lg"
                 >
                   Influencer
                 </li>
@@ -111,26 +111,24 @@ export default function Signup() {
             )}
           </div>
 
-          {/* Error Display */}
+          {/* Error Message */}
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={loading}
-            className={`w-full py-2 rounded-lg ${
-              loading
-                ? 'bg-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-500 text-white'
-            }`}
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg shadow-lg transition-all"
           >
-            {loading ? 'Registering...' : 'Sign Up'}
+            Sign Up
           </button>
         </form>
 
-        {/* Redirect to Login */}
-        <p className="mt-4 text-center text-sm">
-          Already have an account? <Link to="/login" className="underline hover:text-blue-400">Login here</Link>
+        {/* Login Redirect */}
+        <p className="mt-6 text-center text-sm">
+          Already have an account?{' '}
+          <Link to="/login" className="underline hover:text-blue-400">
+            Login here
+          </Link>
         </p>
       </div>
     </div>

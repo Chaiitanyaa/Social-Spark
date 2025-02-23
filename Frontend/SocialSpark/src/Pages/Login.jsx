@@ -22,11 +22,21 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-700 to-blue-900 text-white">
-      <div className="bg-blue-800 p-10 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-6">Login to Social-Spark</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 text-white relative">
+      {/* Back to Home Button */}
+      <button
+        onClick={() => navigate('/')}
+        className="absolute top-6 left-6 bg-white/10 backdrop-blur-md text-white px-4 py-2 rounded-lg hover:bg-white/20 transition-all shadow-lg"
+      >
+        ← Back to Home
+      </button>
+
+      {/* Login Form with Glassmorphism */}
+      <div className="bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-2xl w-full max-w-md">
+        <h2 className="text-4xl font-bold text-center mb-8">Login to Social-Spark</h2>
 
         <form onSubmit={handleLogin} className="space-y-6">
+          {/* Email Field */}
           <div>
             <label className="block text-sm mb-2">Email</label>
             <input
@@ -34,11 +44,12 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
-              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
 
+          {/* Password Field */}
           <div>
             <label className="block text-sm mb-2">Password</label>
             <input
@@ -46,23 +57,29 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-3 rounded-lg bg-white/20 text-white placeholder-gray-300 focus:ring-2 focus:ring-blue-400"
               required
             />
           </div>
 
+          {/* Error Message */}
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-lg shadow-lg transition-all"
           >
             Login
           </button>
         </form>
 
-        <p className="mt-4 text-center text-sm">
-          Don't have an account? <Link to="/signup" className="underline hover:text-blue-400">Sign up</Link>
+        {/* Signup Redirect */}
+        <p className="mt-6 text-center text-sm">
+          Don't have an account?{' '}
+          <Link to="/signup" className="underline hover:text-blue-400">
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
