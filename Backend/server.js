@@ -23,9 +23,6 @@ app.use('/api/influencers', influencerRoutes);
 app.get('/', (req, res) => {
     res.send('Influencer Finder API is running...');
 });
-
-app.use('/api/auth', authRoutes);
-app.use('/api/influencers', influencerRoutes);
 app.use(cors({
     origin: '*', // Allows requests from any domain/IP
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
