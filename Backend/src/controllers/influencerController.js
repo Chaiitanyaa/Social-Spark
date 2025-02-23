@@ -107,7 +107,7 @@ export const findInfluencers = async (req, res) => {
 // returns influencers for the company
 
 export const getInfluencers = async (req, res) => {
-    const { description } = req.body;
+
     try {
         // Ensure `req.user.id` exists
         if (!req.user || !req.user.id) {
