@@ -6,18 +6,28 @@ export default function Signup() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('company'); // Default role
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown state
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
+
+    console.log('Submitting Registration:', { name, email, password, role });
 
     try {
-      await registerUser(name, email, password);
-      navigate('/login'); // Redirect to login after successful registration
+      const response = await registerUser(name, email, password, role);
+      console.log('Registration Success:', response);
+      navigate('/login'); // Redirect on success
     } catch (err) {
-      setError(err.message || 'Registration failed');
+      console.error('Signup Error:', err);
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,6 +37,7 @@ export default function Signup() {
         <h2 className="text-3xl font-bold text-center mb-6">Create Your Account</h2>
 
         <form onSubmit={handleSignup} className="space-y-6">
+          {/* Full Name Field */}
           <div>
             <label className="block text-sm mb-2">Full Name</label>
             <input
@@ -39,6 +50,7 @@ export default function Signup() {
             />
           </div>
 
+          {/* Email Field */}
           <div>
             <label className="block text-sm mb-2">Email</label>
             <input
@@ -51,6 +63,7 @@ export default function Signup() {
             />
           </div>
 
+          {/* Password Field */}
           <div>
             <label className="block text-sm mb-2">Password</label>
             <input
@@ -63,16 +76,59 @@ export default function Signup() {
             />
           </div>
 
+          {/* Role Dropdown */}
+          <div className="relative">
+            <label className="block text-sm mb-2">Role</label>
+            <button
+              type="button"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="w-full px-4 py-2 rounded-lg bg-blue-700 text-white focus:ring-2 focus:ring-blue-400 text-left"
+            >
+              {role.charAt(0).toUpperCase() + role.slice(1)} ▼
+            </button>
+
+            {dropdownOpen && (
+              <ul className="absolute w-full bg-blue-700 rounded-lg shadow-lg mt-2 z-10">
+                <li
+                  onClick={() => {
+                    setRole('company');
+                    setDropdownOpen(false);
+                  }}
+                  className="px-4 py-2 hover:bg-blue-600 cursor-pointer rounded-t-lg"
+                >
+                  Company
+                </li>
+                <li
+                  onClick={() => {
+                    setRole('influencer');
+                    setDropdownOpen(false);
+                  }}
+                  className="px-4 py-2 hover:bg-blue-600 cursor-pointer rounded-b-lg"
+                >
+                  Influencer
+                </li>
+              </ul>
+            )}
+          </div>
+
+          {/* Error Display */}
           {error && <p className="text-red-400 text-sm text-center">{error}</p>}
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg"
+            disabled={loading}
+            className={`w-full py-2 rounded-lg ${
+              loading
+                ? 'bg-gray-500 cursor-not-allowed'
+                : 'bg-blue-600 hover:bg-blue-500 text-white'
+            }`}
           >
-            Sign Up
+            {loading ? 'Registering...' : 'Sign Up'}
           </button>
         </form>
 
+        {/* Redirect to Login */}
         <p className="mt-4 text-center text-sm">
           Already have an account? <Link to="/login" className="underline hover:text-blue-400">Login here</Link>
         </p>
