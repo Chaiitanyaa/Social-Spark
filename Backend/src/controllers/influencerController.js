@@ -45,24 +45,24 @@ const fetchInfluencers = async (keywords) => {
 };
 
 // Find lookalike influencers
-// const fetchLookalikeInfluencers = async (influencers) => {
-//   let lookalikes = [];
+const fetchLookalikeInfluencers = async (influencers) => {
+  let lookalikes = [];
 
-//   for (const influencer of influencers) {
-//     try {
-//       const response = await axios.get(DMT_LOOKALIKE_URL, {
-//         params: { channelType: "youtube", url: influencer.url },
-//         headers: { "x-rapidapi-key": process.env.RAPIDAPI_KEY },
-//       });
+  for (const influencer of influencers) {
+    try {
+      const response = await axios.get(DMT_LOOKALIKE_URL, {
+        params: { channelType: "youtube", url: influencer.url },
+        headers: { "x-rapidapi-key": process.env.RAPIDAPI_KEY },
+      });
 
-//       lookalikes.push(...(response.data?.data?.channels));
-//     } catch (error) {
-//       console.error(`Error fetching lookalikes for ${influencer.name}:`, error);
-//     }
-//   }
+      lookalikes.push(...(response.data?.data?.channels));
+    } catch (error) {
+      console.error(`Error fetching lookalikes for ${influencer.name}:`, error);
+    }
+  }
 
-//   return lookalikes;
-// };
+  return lookalikes;
+};
 
 // Controller function to find and store influencers
 export const findInfluencers = async (req, res) => {
@@ -82,16 +82,10 @@ export const findInfluencers = async (req, res) => {
     const influencers = await fetchInfluencers(keywords);
 
     // Step 3: Find lookalikes (5 API calls)
-    // const lookalikes = await fetchLookalikeInfluencers(influencers);
-    // console.log(
-    //   `Found lookalikes:`,
-    //   lookalikes.map((i) => i.name)
-    // );
+    const lookalikes = await fetchLookalikeInfluencers(influencers);
 
     // Step 4: Combine all influencers
-    // const allInfluencers = [...influencers, ...lookalikes];
-
-    const allInfluencers = influencers;
+    const allInfluencers = [...influencers, ...lookalikes];
 
     // Step 5: Store in MongoDB
     const savedData = await Influencer.create({
