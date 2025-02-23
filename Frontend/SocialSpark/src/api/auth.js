@@ -5,7 +5,7 @@ const API_BASE_URL = 'http://localhost:5002'; // Replace with your backend URL
 // Login API
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/login`, {
+    const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
       email,
       password,
     });
