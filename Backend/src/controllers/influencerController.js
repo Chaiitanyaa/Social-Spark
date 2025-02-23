@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Influencer from '../models/influencerModel.js';
 
+
 // Extract keywords using a dummy function (Replace with Gemini API)
 const extractKeywords = async (description) => {
     console.log(`Extracting keywords from: "${description}"`);
