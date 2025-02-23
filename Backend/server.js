@@ -23,9 +23,12 @@ app.use('/api/influencers', influencerRoutes);
 app.get('/', (req, res) => {
     res.send('Influencer Finder API is running...');
 });
+app.use(cors({
+    origin: '*', // Allows requests from any domain/IP
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers
+}));
 
-app.use('/api/auth', authRoutes);
-app.use('/api/influencers', influencerRoutes);
 
 const PORT = process.env.PORT || 5002;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
