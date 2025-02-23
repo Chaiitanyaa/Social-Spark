@@ -2,6 +2,7 @@ import axios from "axios";
 import Influencer from "../models/influencerModel.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+
 // Extract keywords using a dummy function (Replace with Gemini API)
 const extractKeywords = async (description) => {
   
@@ -43,6 +44,8 @@ const fetchInfluencers = async (keywords) => {
     console.error("Error fetching influencers:", error);
   }
 };
+
+
 
 // Find lookalike influencers
 const fetchLookalikeInfluencers = async (influencers) => {
@@ -99,4 +102,30 @@ export const findInfluencers = async (req, res) => {
     console.error("Error processing request:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+// returns influencers for the company
+
+export const getInfluencers = async (req, res) => {
+    const { description } = req.body;
+    try {
+        // Ensure `req.user.id` exists
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'Unauthorized: User ID is missing' });
+        }
+
+        // Fetch influencers for the logged-in company
+        const influencers = await Influencer.find({ companyId: req.user.id });
+        
+
+        if (!influencers.length) {
+            return res.status(404).json({ message: 'No influencers found for this company' });
+        }
+
+        // Send response
+        res.status(200).json(influencers);
+    } catch (error) {
+        console.error('Error fetching influencers:', error);
+        res.status(500).json({ message: 'Server error while retrieving influencers' });
+    }
 };
