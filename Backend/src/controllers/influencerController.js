@@ -129,3 +129,26 @@ export const getInfluencers = async (req, res) => {
         res.status(500).json({ message: 'Server error while retrieving influencers' });
     }
 };
+
+export const deleteInfluencer = async (req, res) => {
+    const { id } = req.body;
+    try {
+        // Ensure `req.user.id` exists
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'Unauthorized: User ID is missing' });
+        }
+
+        // Delete influencers for the logged-in company
+        const deletedInfluencers = await Influencer.delete({ id: id});
+
+        if (!deletedInfluencers.deletedCount) {
+            return res.status(404).json({ message: 'No influencers found for this company' });
+        }
+
+        // Send response
+        res.status(200).json({ message: 'Influencers deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting influencers:', error);
+        res.status(500).json({ message: 'Server error while deleting influencers' });
+}
+    }
